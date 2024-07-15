@@ -2,6 +2,8 @@
 
 ## A UI mod for World of Tanks PC
 
+[Wargaming Mod Portal](https://wgmods.net/6803/)
+
 This mod allows you to scale the UI in World of Tanks PC from 0.7x to 2.0x in 0.1x increments. This is useful for high resolution displays where the UI may be too small to read comfortably.
 
 ![extended interface scaling demo](./extended-interface-scaling.gif)
