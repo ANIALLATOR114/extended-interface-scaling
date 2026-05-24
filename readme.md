@@ -84,6 +84,12 @@ If the py launcher knows about 2.7: `py -2.7 build.py --username ANIALLATOR --ve
 
 Output: `build/ANIALLATOR.Extended_Interface_Scaling_2.0.0.wotmod`
 
+### CI / Releases
+
+GitHub Actions builds the mod on every pull request and on merges to `master`.
+
+- **Pull requests** — download the `.wotmod` from the workflow run’s **Artifacts** (`wotmod-pr-{commit_sha}`).
+- **Merges to `master`** — publishes or updates a [GitHub Release](https://github.com/ANIALLATOR114/extended-interface-scaling/releases) (`v{version}`) with the built `.wotmod` attached.
 
 ### Decompiled reference
 

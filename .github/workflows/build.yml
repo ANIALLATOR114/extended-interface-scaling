@@ -1,0 +1,48 @@
+name: Build mod
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: python:2.7.18-buster
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build wotmod
+        run: python build.py --username ANIALLATOR
+
+      - name: Resolve version and output path
+        id: meta
+        run: |
+          VERSION=$(python -c "import re; print re.search(r'default=\"(\d+\.\d+\.\d+)\"', open('build.py').read()).group(1)")
+          WOTMOD="build/ANIALLATOR.Extended_Interface_Scaling_${VERSION}.wotmod"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "wotmod=${WOTMOD}" >> "$GITHUB_OUTPUT"
+          test -f "$WOTMOD"
+
+      - name: Upload PR artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: wotmod-pr-${{ github.sha }}
+          path: ${{ steps.meta.outputs.wotmod }}
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.meta.outputs.version }}
+          name: v${{ steps.meta.outputs.version }}
+          files: ${{ steps.meta.outputs.wotmod }}
+          generate_release_notes: true
+          make_latest: true
