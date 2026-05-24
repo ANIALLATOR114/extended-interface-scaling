@@ -1,60 +1,97 @@
 # Extended Interface Scaling
 
-## A UI mod for World of Tanks PC
+![Extended Interface Scaling mod settings](extended_interface_scaling.png)
+
+A World of Tanks PC mod for precision UI scaling.
 
 [Wargaming Mod Portal](https://wgmods.net/6803/)
 
-This mod allows you to scale the UI in World of Tanks PC from 0.7x to 2.0x in 0.1x increments. This is useful for high resolution displays where the UI may be too small to read comfortably.
+## Overview
 
-![extended interface scaling demo](./extended-interface-scaling.gif)
+Extended Interface Scaling v2 applies custom interface scaling so you can tune the UI size to exactly what you want.
 
-# Installation
+Use the garage UI to pick a scale for your resolution, or edit the JSON config file directly.
 
-This mod is installed by downloading the latest release from the Wargaming Mod portal https://wgmods.net/
+### Players
 
-Place the .wotmod file inside the mods folder in your World of Tanks installation directory for the latest version of the game.
+- World of Tanks PC (EU WG or Lesta)
+- Required for the garage settings UI:
+  - [ModsList](https://gitlab.com/wot-public-mods/mods-list/)
+  - [ModsSettings API](https://github.com/izeberg/modssettingsapi) (mod configuration menu)
+  - [OpenWG Gameface](https://gitlab.com/openwg/wot.gameface/) (required by ModsList)
 
-# Development
+Without ModsList/ModsSettings, the mod still works using the JSON config.
 
-## Requirements
+## Installation
 
-- Python 2.7
+1. Install **Gameface**, **ModsList**, and **ModsSettings API** `.wotmod` files into `World_of_Tanks/mods/<game_version>/`
+   - Load order: Gameface → ModsList → ModsSettings API → Extended Interface Scaling
+2. Install this mod’s `.wotmod` in the same folder
+3. Launch the game
+4. Open **Mods** in the garage → **Mod configurator**
 
-## Building
+## Usage
 
-> [!NOTE]  
-> Python 2.7.18 is required to run the packer.py script.
-> If you had Python2.7 installed on your c drive you can point to that version like this
-> `C:/Python27/python.exe packer.py`
+When the mod is **enabled**, it overrides the in-game **Options → Graphics → Interface Scaling** setting. Configure via the mod configuration page instead.
 
-To build the mod, run the following command in the root directory of the project:
+### JSON fallback
 
-This will run with the default arguments.
+If ModsList/ModsSettings are not installed, edit the JSON config file directly:
 
+`World_of_Tanks/mods/<game_version>/configs/ANIALLATOR.extended_interface_scaling/config.json`
+
+```json
+{
+  "scale": 1.25,
+  "enabled": true
+}
 ```
-python packer.py
+
+Restart the game to reload settings if ModsSettings is not installed.
+
+## Development
+
+- Python 2.7.18 ([download page](https://www.python.org/downloads/release/python-2718/))
+- On Windows: use the **x86-64 MSI** (`python-2.7.18.amd64.msi`) unless you specifically need 32-bit
+
+### Setup
+
+Install [Python 2.7.18](https://www.python.org/downloads/release/python-2718/) from python.org. The default install path on Windows is usually `C:\Python27\`.
+
+Verify the install:
+
+```bash
+# CMD or PowerShell
+C:\Python27\python.exe --version   # should print Python 2.7.18
+
+# Git Bash — use forward slashes (backslashes are escape characters in bash)
+/c/Python27/python.exe --version
 ```
 
-To run the packer.py script with all arguments, use the following command:
+If the Windows **py launcher** registered 2.7 during install, `py -2.7 --version` also works in any shell.
 
+### Build
+
+```bash
+# CMD or PowerShell
+C:\Python27\python.exe build.py --username ANIALLATOR --version 2.0.0
+
+# Git Bash
+/c/Python27/python.exe build.py --username ANIALLATOR --version 2.0.0
 ```
-python packer.py --username ANIALLATOR --name "Extended Interface Scaling" --version 1.0.0 --description "A UI mod for World of Tanks PC" --folder ./res
-```
 
-### Paramaters
+If the py launcher knows about 2.7: `py -2.7 build.py --username ANIALLATOR --version 2.0.0`
 
-- `--username` - The username of the mod author
-- `--name` - The name of the mod
-- `--version` - The version of the mod
-- `--description` - A description of the mod
-- `--folder` - The folder containing the mod files
+Output: `build/ANIALLATOR.Extended_Interface_Scaling_2.0.0.wotmod`
 
-C:/Python27/python.exe packer.py --username test
 
-# Credits
+### Decompiled reference
 
-StranikS-Scan for the decompiled game files
-https://github.com/StranikS-Scan/WorldOfTanks-Decompiled
+See [docs/DECOMPILED_REFERENCE.md](docs/DECOMPILED_REFERENCE.md). Primary EU reference branch: [StranikS-Scan/WorldOfTanks-Decompiled `2.2.1.1_EU`](https://github.com/StranikS-Scan/WorldOfTanks-Decompiled/tree/2.2.1.1_EU).
 
-LockBlock-dev for the packing script
-https://github.com/LockBlock-dev/wot-mods/tree/master/auto-packer
+## Credits
+
+- [StranikS-Scan / WorldOfTanks-Decompiled](https://github.com/StranikS-Scan/WorldOfTanks-Decompiled) — decompiled game sources
+- [ModsSettings API](https://github.com/izeberg/modssettingsapi) — mod configuration menu
+- [ModsList](https://gitlab.com/wot-public-mods/mods-list) — garage mod menu
+- [LockBlock-dev](https://github.com/LockBlock-dev/wot-mods/tree/master/auto-packer) — original packer script
